@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace SharedAccessKey
 {
@@ -18,22 +20,61 @@ namespace SharedAccessKey
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log, ExecutionContext context)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+
+          log.LogInformation("C# HTTP trigger function processed a request.");
+
+        try
+        { 
 
             string name = req.Query["name"];
-
             var config = BuildAppConfig(context);
 
             log.LogInformation("data");
+
+            var targetConnectionString = config["STORAGE_CONNECTION_STRING"];
+
             log.LogInformation(config["STORAGE_CONNECTION_STRING"]);
 
+
+            await GetSharedAccessKeyAsync(targetConnectionString, name, "invoice");
+
+            
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             name = name ?? data?.name;
 
-            return name != null
+              return name != null
                 ? (ActionResult)new OkObjectResult($"Hello, {name}")
                 : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
+
+            }
+            catch(Exception ex) {
+
+                log.LogError(ex.Message);                
+            }  
+
+            return (ActionResult)new OkObjectResult($"Ok");
+        }
+
+        private static async Task<string> GetSharedAccessKeyAsync(string storageConnectionString, string targetfilename, string targetcontainer) 
+        {
+
+         
+           CloudStorageAccount storageAccount = CloudStorageAccount.Parse(storageConnectionString);
+           var client = storageAccount.CreateCloudBlobClient();
+           var container = client.GetContainerReference(targetcontainer);
+           await container.CreateIfNotExistsAsync();
+
+           CloudBlockBlob blob = container.GetBlockBlobReference(targetfilename);
+
+           SharedAccessBlobPolicy adHocSAS = new SharedAccessBlobPolicy()
+           {
+                SharedAccessExpiryTime = DateTime.UtcNow.AddMinutes(5),
+                Permissions = SharedAccessBlobPermissions.Read | SharedAccessBlobPermissions.Write | SharedAccessBlobPermissions.Create
+           };
+    
+            var sasBlobToken = blob.GetSharedAccessSignature(adHocSAS);                       
+            return blob.Uri + sasBlobToken;        
         }
 
         private static IConfigurationRoot BuildAppConfig(ExecutionContext context) {
