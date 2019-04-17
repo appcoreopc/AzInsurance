@@ -9,9 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
-using System;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 
 namespace ClaimSubmission
@@ -31,6 +29,8 @@ namespace ClaimSubmission
 
             string name = req.Query["name"];
 
+            var claimData = GetClaimData<ClaimForm>(req.Body, "", "");
+
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             name = name ?? data?.name;
@@ -45,11 +45,9 @@ namespace ClaimSubmission
                 var config = new ConfigurationBuilder().SetBasePath
                 (context.FunctionAppDirectory).AddJsonFile("local.settings.json", 
                 optional : true, reloadOnChange : true).AddEnvironmentVariables().Build();
-                return config;
-                
+                return config;                
         }
-
-
+        
         public static Message CreateMessage(string label)
         {            
             var msg = new Message(Encoding.UTF8.GetBytes("This is the body of message \"" + label + "\"."));
@@ -58,6 +56,13 @@ namespace ClaimSubmission
             msg.Label = "Invoice";
             msg.TimeToLive = TimeSpan.FromSeconds(90);
             return msg;
+        }
+
+        private static async Task<T> GetClaimData<T>(Stream body, params string[] fields) {
+
+            string requestBody = await new StreamReader(body).ReadToEndAsync();
+            T data = JsonConvert.DeserializeObject<T>(requestBody);
+            return data;
         }
 
     }
