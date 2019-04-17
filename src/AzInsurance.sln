@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClaimSubmission", "ClaimSubmission\ClaimSubmission.csproj", "{5369436F-C212-48EB-AED1-B197C5BE7661}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedAccessKey", "SharedAccessKey\SharedAccessKey.csproj", "{92EB55DD-77E7-4CD6-846E-84665C73B4FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5369436F-C212-48EB-AED1-B197C5BE7661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5369436F-C212-48EB-AED1-B197C5BE7661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5369436F-C212-48EB-AED1-B197C5BE7661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5369436F-C212-48EB-AED1-B197C5BE7661}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92EB55DD-77E7-4CD6-846E-84665C73B4FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92EB55DD-77E7-4CD6-846E-84665C73B4FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92EB55DD-77E7-4CD6-846E-84665C73B4FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92EB55DD-77E7-4CD6-846E-84665C73B4FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F729D25F-B6F6-4CCF-800C-27CB2DECD63C}
+	EndGlobalSection
+EndGlobal
