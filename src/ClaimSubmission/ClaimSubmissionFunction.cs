@@ -57,6 +57,7 @@ namespace ClaimSubmission
             {
                 return null;
             }
+
             var jsonContent = JsonConvert.SerializeObject(message);
             var msg = new Message(Encoding.UTF8.GetBytes(jsonContent));
             msg.ContentType = "application/json";
