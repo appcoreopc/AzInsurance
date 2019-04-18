@@ -30,6 +30,7 @@ namespace SharedAccessKey
                 string name = req.Query[FilenameTargetField];
                 var targetConnectionString = config[StorageConnectionString];
                 var sharedAccessKey = await GetSharedAccessKeyAsync(targetConnectionString, name, TargetInvoiceStorageContainer);
+
                 return !string.IsNullOrEmpty(sharedAccessKey) ? (ActionResult)new OkObjectResult(sharedAccessKey)
                   : new BadRequestObjectResult(UnableObtainedSharedAccessKey);
             }

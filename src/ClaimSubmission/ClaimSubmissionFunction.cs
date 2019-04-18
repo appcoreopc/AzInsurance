@@ -20,6 +20,7 @@ namespace ClaimSubmission
         private const string TargetClaimQueueName = "ClaimQueue";
         private const string ErroSubmittingClaimMessage = "Error submmitting claim.";
         private const string ClaimSubmissionSuccessful = "Submission successful";
+        private const string SettingFilename = "local.settings.json";
 
         [FunctionName("ClaimSubmissionFunction")]
         public static async Task<IActionResult> Run(
@@ -28,18 +29,17 @@ namespace ClaimSubmission
         {
             var config = BuildAppConfig(context);
             var targetConnectionString = config[StorageConnectionString];
-           
-            string name = req.Query["name"];
 
-            var userClaimFormData = GetClaimDataInput<ClaimForm>(req.Body, "", "");
+            if (targetConnectionString == null)
+            {
+                return new BadRequestObjectResult(ErroSubmittingClaimMessage);
+            }
+
+            var userClaimFormData = await GetClaimDataInput<ClaimForm>(req.Body);
             var sender = new MessageSender(targetConnectionString, TargetClaimQueueName);
-            await sender.SendAsync(CreateMessage("Invoice"));
+            await sender.SendAsync(CreateMessage(userClaimFormData));
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
-
-            return name != null
+            return userClaimFormData != null
                 ? (ActionResult)new OkObjectResult(ClaimSubmissionSuccessful)
                 : new BadRequestObjectResult(ErroSubmittingClaimMessage);
         }
@@ -47,21 +47,25 @@ namespace ClaimSubmission
         private static IConfigurationRoot BuildAppConfig(ExecutionContext context)
         {
             var config = new ConfigurationBuilder().SetBasePath
-            (context.FunctionAppDirectory).AddJsonFile("local.settings.json", optional: true, reloadOnChange: true).AddEnvironmentVariables().Build();
+            (context.FunctionAppDirectory).AddJsonFile(SettingFilename, optional: true, reloadOnChange: true).AddEnvironmentVariables().Build();
             return config;
         }
 
-        public static Message CreateMessage(string label)
+        public static Message CreateMessage(ClaimForm message)
         {
-            var msg = new Message(Encoding.UTF8.GetBytes("This is the body of message \"" + label + "\"."));
-            msg.UserProperties.Add("Priority", 1);
-            msg.UserProperties.Add("Importance", "High");
-            msg.Label = "Invoice";
+            if (message == null)
+            {
+                return null;
+            }
+            var jsonContent = JsonConvert.SerializeObject(message);
+            var msg = new Message(Encoding.UTF8.GetBytes(jsonContent));
+            msg.ContentType = "application/json";
+            msg.Label = message.Label;
             msg.TimeToLive = TimeSpan.FromSeconds(90);
             return msg;
         }
 
-        private static async Task<T> GetClaimDataInput<T>(Stream body, params string[] fields)
+        private static async Task<T> GetClaimDataInput<T>(Stream body)
         {
             string requestBody = await new StreamReader(body).ReadToEndAsync();
             T data = JsonConvert.DeserializeObject<T>(requestBody);
