@@ -1,3 +1,13 @@
 
 src/ClaimTicketService/bin
 src/ClaimTicketService/obj
+
+src/SharedAccessKey/\.vscode/
+
+src/ClaimSubmission/\.vscode/
+
+src/ClaimTicketUpdate/\.vscode/
+
+src/ClaimValidation/\.vscode/
+
+src/\.vscode/

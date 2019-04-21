@@ -13,11 +13,15 @@ namespace ClaimTicketService
 public static async Task<List<string>> Run(DurableOrchestrationContext context)
 {
     var outputs = new List<string>();
+     
+    // validate queue 
 
-    outputs.Add(await context.CallActivityAsync<string>("E1_SayHello", "Tokyo"));
-    outputs.Add(await context.CallActivityAsync<string>("E1_SayHello", "Seattle"));
-    outputs.Add(await context.CallActivityAsync<string>("E1_SayHello", "London"));
+    // use cognitive services to access damage 
 
+    // crop and store image 
+
+    // assiged and update ticket status 
+    
     // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
     return outputs;
 }
