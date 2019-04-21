@@ -26,7 +26,6 @@ namespace ClaimValidation
             return (ActionResult) new OkObjectResult("");          
         }
 
-
         private static async Task ValidateClaimData() {
 
             await Task.Delay(1000);
