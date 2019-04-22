@@ -11,3 +11,6 @@ src/ClaimTicketUpdate/\.vscode/
 src/ClaimValidation/\.vscode/
 
 src/\.vscode/
+src/.vs/
+src/AzCore.Shared/bin/
+src/AzCore.Shared/obj/

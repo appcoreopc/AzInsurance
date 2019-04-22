@@ -10,45 +10,34 @@ using Newtonsoft.Json;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
 using System.Text;
-using Microsoft.Extensions.Configuration;
+using AzCore.Shared;
+using AzCore.Shared.JsonSerializer;
 
 namespace ClaimSubmission
 {
     public static class ClaimSubmissionFunction
     {
-        private const string StorageConnectionString = "STORAGE_CONNECTION_STRING";
-        private const string TargetClaimQueueName = "ClaimQueue";
         private const string ErroSubmittingClaimMessage = "Error submmitting claim.";
         private const string ClaimSubmissionSuccessful = "Submission successful";
-        private const string SettingFilename = "local.settings.json";
 
         [FunctionName("ClaimSubmissionFunction")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-            ILogger log, ExecutionContext context)
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log, ExecutionContext context)
         {
-            var config = BuildAppConfig(context);
-            var targetConnectionString = config[StorageConnectionString];
+            var config = CoreConfiguration.BuildAppConfig(context);
+            var messageConnectionString = config[ApplicationConstants.StorageConnectionString];
 
-            if (targetConnectionString == null)
+            if (messageConnectionString == null)
             {
                 return new BadRequestObjectResult(ErroSubmittingClaimMessage);
             }
 
-            var userClaimFormData = await GetClaimDataInput<ClaimForm>(req.Body);
-            var sender = new MessageSender(targetConnectionString, TargetClaimQueueName);
+            var userClaimFormData = await MessageConverter.Deserialize<ClaimForm>(req.Body);
+            var sender = new MessageSender(messageConnectionString, ApplicationConstants.TargetClaimQueueName);
             await sender.SendAsync(CreateMessage(userClaimFormData));
 
             return userClaimFormData != null
                 ? (ActionResult)new OkObjectResult(ClaimSubmissionSuccessful)
                 : new BadRequestObjectResult(ErroSubmittingClaimMessage);
-        }
-
-        private static IConfigurationRoot BuildAppConfig(ExecutionContext context)
-        {
-            var config = new ConfigurationBuilder().SetBasePath
-            (context.FunctionAppDirectory).AddJsonFile(SettingFilename, optional: true, reloadOnChange: true).AddEnvironmentVariables().Build();
-            return config;
         }
 
         public static Message CreateMessage(ClaimForm message)
@@ -64,13 +53,6 @@ namespace ClaimSubmission
             msg.Label = message.Label;
             msg.TimeToLive = TimeSpan.FromSeconds(90);
             return msg;
-        }
-
-        private static async Task<T> GetClaimDataInput<T>(Stream body)
-        {
-            string requestBody = await new StreamReader(body).ReadToEndAsync();
-            T data = JsonConvert.DeserializeObject<T>(requestBody);
-            return data;
         }
     }
 }

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
+using AzCore.Shared;
 
 namespace ClaimImageAssessment
 {
@@ -25,7 +25,7 @@ namespace ClaimImageAssessment
             new List<VisualFeatureTypes>()
         {
             VisualFeatureTypes.Categories, VisualFeatureTypes.Description,
-            VisualFeatureTypes.Faces, VisualFeatureTypes.ImageType,
+            VisualFeatureTypes.Objects, VisualFeatureTypes.ImageType,
             VisualFeatureTypes.Tags
         };
 
@@ -36,7 +36,7 @@ namespace ClaimImageAssessment
         {
             log.LogInformation("Analyzing image");
 
-            var config = BuildAppConfig(context);
+            var config = CoreConfiguration.BuildAppConfig(context);
             var visionSubscriptionKey = config[SubscriptionKey];
             var endpoint = config[VisionEndpoint];
 
@@ -64,13 +64,6 @@ namespace ClaimImageAssessment
                 return null;
             }
             return await computerVision.AnalyzeImageAsync(imageUrl, features);
-        }
-
-        private static IConfigurationRoot BuildAppConfig(ExecutionContext context)
-        {
-            var config = new ConfigurationBuilder().SetBasePath
-            (context.FunctionAppDirectory).AddJsonFile(SettingFilename, optional: true, reloadOnChange: true).AddEnvironmentVariables().Build();
-            return config;
         }
 
         private static async Task<T> GetImageDataInput<T>(Stream body)
