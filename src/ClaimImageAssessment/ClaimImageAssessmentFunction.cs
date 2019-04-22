@@ -42,10 +42,9 @@ namespace ClaimImageAssessment
 
             var visionClient = SetupVisionClient(visionSubscriptionKey, endpoint);
             var imageData = await GetImageDataInput<ClaimImageAnalysis>(req.Body);
+            var imageAnalysis = await AnalyzeRemoteAsync(visionClient, imageData.ImageSource, log);
 
-            await AnalyzeRemoteAsync(visionClient, imageData.ImageSource);
-
-            return (ActionResult) new OkObjectResult($"Done analyzing image");
+            return imageAnalysis != null ? (ActionResult)new OkObjectResult($"Done analyzing image") : new BadRequestObjectResult("Unable to analyze image");
         }
 
         private static ComputerVisionClient SetupVisionClient(string visionSubscriptionKey, string endpoint)
@@ -55,19 +54,16 @@ namespace ClaimImageAssessment
             return visionClient;
         }
 
-
         // Analyze a remote image
-        private static async Task AnalyzeRemoteAsync(
-            ComputerVisionClient computerVision, string imageUrl)
+        private static async Task<ImageAnalysis> AnalyzeRemoteAsync(
+            ComputerVisionClient computerVision, string imageUrl, ILogger log)
         {
             if (!Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute))
             {
-                Console.WriteLine("\nInvalid remoteImageUrl:\n{0} \n", imageUrl);
-                return;
+                log.LogInformation("\nInvalid remoteImageUrl:\n{0} \n", imageUrl);
+                return null;
             }
-
-            ImageAnalysis analysis = await computerVision.AnalyzeImageAsync(imageUrl, features);
-            
+            return await computerVision.AnalyzeImageAsync(imageUrl, features);
         }
 
         private static IConfigurationRoot BuildAppConfig(ExecutionContext context)
