@@ -9,10 +9,11 @@ namespace ClaimTicketService
 {
 
   public static class ClaimTicketServiceFunction 
-  {
-public static async Task<List<string>> Run(DurableOrchestrationContext context)
-{
-    var outputs = new List<string>();
+  {   
+      
+    public static async Task<List<string>> Run(DurableOrchestrationContext context)
+    {
+      var outputs = new List<string>();
      
     // validate queue 
 
@@ -23,7 +24,7 @@ public static async Task<List<string>> Run(DurableOrchestrationContext context)
     // assiged and update ticket status 
     
     // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
-    return outputs;
-}
+       return outputs;
+    }
   }
 }

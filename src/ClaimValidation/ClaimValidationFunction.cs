@@ -20,10 +20,9 @@ namespace ClaimValidation
         public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log, ExecutionContext context)
         {
-            log.LogInformation($"Validating claim");
+            log.LogInformation($"Fake claim validation");
             await ValidateClaimData();
-
-            return (ActionResult) new OkObjectResult("");          
+            return (ActionResult) new OkObjectResult("Ok");          
         }
 
         private static async Task ValidateClaimData() {
