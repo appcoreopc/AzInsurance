@@ -8,23 +8,23 @@ using Microsoft.Azure.WebJobs;
 namespace ClaimTicketService
 {
 
-  public static class ClaimTicketServiceFunction 
-  {   
-      
-    public static async Task<List<string>> Run(DurableOrchestrationContext context)
+    public static class ClaimTicketServiceFunction
     {
-      var outputs = new List<string>();
-     
-    // validate queue 
 
-    // use cognitive services to access damage 
+        public static async Task<List<string>> Run(DurableOrchestrationContext context)
+        {
+            var outputs = new List<string>();
 
-    // crop and store image 
+            // validate queue 
 
-    // assiged and update ticket status 
-    
-    // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
-       return outputs;
+            // use cognitive services to access damage 
+
+            // crop and store image 
+
+            // assiged and update ticket status 
+
+            // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
+            return outputs;
+        }
     }
-  }
 }

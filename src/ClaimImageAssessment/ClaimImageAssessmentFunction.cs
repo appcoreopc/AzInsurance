@@ -10,11 +10,15 @@ using Newtonsoft.Json;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace ClaimImageAssessment
 {
     public static class ClaimImageAssessmentFunction
     {
+        private const string SettingFilename = "local.settings.json";
+        private const string SubscriptionKey = "AZURE_VISION_SUBSCRIPTIONKEY";
+        private const string VisionEndpoint = "AZURE_VISON_ENDPOINT";
 
         // Specify the features to return
         private static readonly List<VisualFeatureTypes> features =
@@ -28,35 +32,57 @@ namespace ClaimImageAssessment
         [FunctionName("ClaimImageAssessmentFunction")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+            ILogger log, ExecutionContext context)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation("Analyzing image");
 
-            string name = req.Query["name"];
+            var config = BuildAppConfig(context);
+            var visionSubscriptionKey = config[SubscriptionKey];
+            var endpoint = config[VisionEndpoint];
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            var visionClient = SetupVisionClient(visionSubscriptionKey, endpoint);
+            var imageData = await GetImageDataInput<ClaimImageAnalysis>(req.Body);
 
-            return name != null
-                ? (ActionResult)new OkObjectResult($"Hello, {name}")
-                : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
+            await AnalyzeRemoteAsync(visionClient, imageData.ImageSource);
+
+            return (ActionResult) new OkObjectResult($"Done analyzing image");
+        }
+
+        private static ComputerVisionClient SetupVisionClient(string visionSubscriptionKey, string endpoint)
+        {
+            var visionClient = new ComputerVisionClient(new ApiKeyServiceClientCredentials(visionSubscriptionKey), new System.Net.Http.DelegatingHandler[] { });
+            visionClient.Endpoint = endpoint;
+            return visionClient;
         }
 
 
-         // Analyze a remote image
+        // Analyze a remote image
         private static async Task AnalyzeRemoteAsync(
             ComputerVisionClient computerVision, string imageUrl)
         {
             if (!Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute))
             {
-                Console.WriteLine(
-                    "\nInvalid remoteImageUrl:\n{0} \n", imageUrl);
+                Console.WriteLine("\nInvalid remoteImageUrl:\n{0} \n", imageUrl);
                 return;
             }
 
             ImageAnalysis analysis = await computerVision.AnalyzeImageAsync(imageUrl, features);
-            // DisplayResults(analysis, imageUrl);
+            
+        }
+
+        private static IConfigurationRoot BuildAppConfig(ExecutionContext context)
+        {
+            var config = new ConfigurationBuilder().SetBasePath
+            (context.FunctionAppDirectory).AddJsonFile(SettingFilename, optional: true, reloadOnChange: true).AddEnvironmentVariables().Build();
+            return config;
+        }
+
+        private static async Task<T> GetImageDataInput<T>(Stream body)
+        {
+            string requestBody = await new StreamReader(body).ReadToEndAsync();
+            T data = JsonConvert.DeserializeObject<T>(requestBody);
+            return data;
         }
     }
 }
+
