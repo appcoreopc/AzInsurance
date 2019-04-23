@@ -12,7 +12,7 @@ namespace ClaimValidation
         public static void Run([ServiceBusTrigger(ApplicationConstants.TargetClaimQueueName, Connection = "MyConn")] string queueItem,
         Int32 deliveryCount, DateTime enqueuedTimeUtc, string messageId, ILogger log, ExecutionContext context)
         {
-            log.LogInformation($"Claim validation content:", queueItem);
+            log.LogInformation($"Claim validation content:{queueItem}");
             var config = CoreConfiguration.BuildAppConfig(context);
             var messageConnectionString = config[ApplicationConstants.StorageConnectionString];
             var userClaimFormData = MessageConverter.Deserialize<ClaimForm>(queueItem);
