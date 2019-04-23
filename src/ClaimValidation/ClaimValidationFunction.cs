@@ -9,7 +9,7 @@ namespace ClaimValidation
     public static class ClaimValidationFunction
     {
         [FunctionName("ClaimValidationFunction")]
-        public static void Run([ServiceBusTrigger(ApplicationConstants.TargetClaimQueueName, Connection = "Endpoint=sb://devservicespace.servicebus.windows.net/;SharedAccessKeyName=WritePolicy;SharedAccessKey=/qr6BPIcrll6WOWea85wwfqHWjllo8r1YR6uRv558V4=;")] string queueItem,
+        public static void Run([ServiceBusTrigger(ApplicationConstants.TargetClaimQueueName, Connection = "MyConn")] string queueItem,
         Int32 deliveryCount, DateTime enqueuedTimeUtc, string messageId, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"Claim validation content:", queueItem);
