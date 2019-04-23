@@ -11,6 +11,7 @@ using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using System.Collections.Generic;
 using AzCore.Shared;
+using System.Linq;
 
 namespace ClaimImageAssessment
 {
@@ -46,6 +47,16 @@ namespace ClaimImageAssessment
             var imageData = await GetImageDataInput<ClaimImageAnalysis>(req.Body);
             var imageAnalysis = await AnalyzeRemoteAsync(visionClient, imageData.ImageSource, log);
 
+            var imageTarget = imageAnalysis.Objects.OrderByDescending(x => x.Confidence).FirstOrDefault();
+            var tags = imageAnalysis.Tags.OrderByDescending(x => x.Confidence).Take(2);
+
+            log.LogInformation($"Image identified : {imageTarget.ObjectProperty}");
+
+            foreach (var item in tags)
+            {
+                log.LogInformation($"{item.Name} : {item.Confidence}");
+            }
+
             log.LogInformation($"Target image value : {imageAnalysis.Description.Captions[0].Text}");
 
             return imageAnalysis != null ? (ActionResult)new OkObjectResult($"Done analyzing image") : new BadRequestObjectResult("Unable to analyze image");
@@ -57,7 +68,7 @@ namespace ClaimImageAssessment
             visionClient.Endpoint = endpoint;
             return visionClient;
         }
-     
+
         private static async Task<ImageAnalysis> AnalyzeRemoteAsync(
             ComputerVisionClient computerVision, string imageUrl, ILogger log)
         {
