@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using AzCore.Shared;
 using System;
 using AzCore.Shared.JsonSerializer;
+using AzCore.Shared.ClaimValidation;
 
 namespace ClaimValidation
 {
@@ -14,15 +15,19 @@ namespace ClaimValidation
         {
             log.LogInformation($"Claim validation content: {queueItem}");
             var config = CoreConfiguration.BuildAppConfig(context);
-            var messageConnectionString = config[ApplicationConstants.StorageConnectionString];
+            var connectionString = config[ApplicationConstants.StorageConnectionString];
             var userClaimFormData = MessageConverter.Deserialize<ClaimForm>(queueItem);
-            ProcessMessage(userClaimFormData);
+            ProcessMessage(userClaimFormData, connectionString, "claimTable");
         }
 
-        private static void ProcessMessage(ClaimForm data)
+        private static void ProcessMessage(ClaimForm data, string connectionString, string tableName)
         {
-            // Query database 
-            
+            var processor = new ClaimValidationProcessor(connectionString, tableName);
+            var record = processor.ProcessAsync(data);
+            if (record != null)
+            {
+                // Place back into a processed queue
+            }
         }
     }
 }
