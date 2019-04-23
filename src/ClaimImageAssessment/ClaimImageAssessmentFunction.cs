@@ -40,9 +40,13 @@ namespace ClaimImageAssessment
             var visionSubscriptionKey = config[SubscriptionKey];
             var endpoint = config[VisionEndpoint];
 
+            log.LogInformation($"data {visionSubscriptionKey}, endpoint {endpoint}");
+
             var visionClient = SetupVisionClient(visionSubscriptionKey, endpoint);
             var imageData = await GetImageDataInput<ClaimImageAnalysis>(req.Body);
             var imageAnalysis = await AnalyzeRemoteAsync(visionClient, imageData.ImageSource, log);
+
+            log.LogInformation($"Target image value : {imageAnalysis.Description.Captions[0].Text}");
 
             return imageAnalysis != null ? (ActionResult)new OkObjectResult($"Done analyzing image") : new BadRequestObjectResult("Unable to analyze image");
         }
@@ -53,8 +57,7 @@ namespace ClaimImageAssessment
             visionClient.Endpoint = endpoint;
             return visionClient;
         }
-
-        // Analyze a remote image
+     
         private static async Task<ImageAnalysis> AnalyzeRemoteAsync(
             ComputerVisionClient computerVision, string imageUrl, ILogger log)
         {
