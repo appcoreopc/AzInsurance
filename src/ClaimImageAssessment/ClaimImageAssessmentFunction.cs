@@ -57,7 +57,7 @@ namespace ClaimImageAssessment
                 log.LogInformation($"{item.Name} : {item.Confidence}");
             }
 
-            log.LogInformation($"Target image value : {imageAnalysis.Description.Captions[0].Text}");
+            log.LogInformation($"Target image value : {imageAnalysis.Description.Captions.FirstOrDefault()?.Text}");
 
             return imageAnalysis != null ? (ActionResult)new OkObjectResult($"Done analyzing image") : new BadRequestObjectResult("Unable to analyze image");
         }
