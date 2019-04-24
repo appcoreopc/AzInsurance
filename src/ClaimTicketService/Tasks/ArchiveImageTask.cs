@@ -4,9 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace ClaimTicketService.Tasks
 {
-    public class ValidateTask
+    public class ArchiveImageTask
     {
-        [FunctionName(TasksConstants.ValidateTask)]
+        [FunctionName(TasksConstants.ArchiveImageTask)]
         public static string SayHello([ActivityTrigger] ClaimForm claim, ILogger log)
         {
             log.LogInformation($"Saying hello to {claim.Name}.");

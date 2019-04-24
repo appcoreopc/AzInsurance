@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AzCore.Shared;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
@@ -9,16 +10,13 @@ namespace ClaimTicketService
 {
     public static class ClaimTicketServiceFunction
     {
-        [FunctionName(TasksConstants.ClaimTicketServiceFunctionTask)]
+        [FunctionName("ClaimTicketServiceFunctionTask")]
         public static async Task<List<string>> RunOrchestrator(
             [OrchestrationTrigger] DurableOrchestrationContext context)
         {
             var outputs = new List<string>();
-
-            // Replace "hello" with the name of your Durable Activity Function.
-            // outputs.Add(await context.CallActivityAsync<string>(TasksConstants.ValidateTask, "Tokyo"));
-            outputs.Add(await context.CallActivityAsync<string>(TasksConstants.ValidateTask, "Seattle"));
-            outputs.Add(await context.CallActivityAsync<string>(TasksConstants.ValidateTask, "London"));
+            outputs.Add(await context.CallActivityAsync<string>(TasksConstants.ValidateTask, new ClaimForm() {  Name = "Test" }));
+            outputs.Add(await context.CallActivityAsync<string>(TasksConstants.ValidateTask, new ClaimForm() { Name = "Test2" }));
             return outputs;
         }
 

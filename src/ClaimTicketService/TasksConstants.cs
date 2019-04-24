@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ClaimTicketService
+﻿namespace ClaimTicketService
 {
     public class TasksConstants
     {
         public const string ClaimTicketServiceFunctionTask = "ClaimTicketServiceFunctionTask";
         public const string ValidateTask = "ValidationTask";
-        public const string ImageDetectionTask = "ImageDetectionTask";
-        public const string ZipImageTask = "ZipImageTask";
+        public const string GetImageVisionTask = "GetImageVisionTask";
+        public const string ArchiveImageTask = "ArchiveImageTask";
+        public const string UpdateTicketTask = "UpdateTicketTask";
     }
 }
