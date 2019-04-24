@@ -1,0 +1,18 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=devstoreapp;AccountKey=KsX6iwemKeb11/LvtWkX4A0UFO/P6N0y/0eKjkyvd9LAtqk4LdoPAMa9KV+RV4D0jO4Tv3OeECn4CkH+4uDDAA==;EndpointSuffix=core.windows.net",
+    "AZURE_VISION_SUBSCRIPTIONKEY": "706edb94878247b0bdb8790b8006039f",
+    "AZURE_VISON_ENDPOINT": "https://westcentralus.api.cognitive.microsoft.com",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsDashboard": "UseDevelopmentStorage=true"
+  },
+  "Host": {
+    "LocalHttpPort": 7071,
+    "CORS": "*"
+  },
+  "ConnectionStrings": {
+    "SQLConnectionString": "<sqlclient-connection-string>",
+    "MyConn": "Endpoint=sb://devservicespace.servicebus.windows.net/;SharedAccessKeyName=WritePolicy;SharedAccessKey=/qr6BPIcrll6WOWea85wwfqHWjllo8r1YR6uRv558V4=;",
+  }
+}
