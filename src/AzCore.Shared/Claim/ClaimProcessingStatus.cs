@@ -1,4 +1,4 @@
-﻿namespace AzCore.Shared.ClaimValidation
+﻿namespace AzCore.Shared.Claim
 {
     public enum ClaimProcessingStatus
     {

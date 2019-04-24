@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using AzCore.Shared;
 using System;
 using AzCore.Shared.JsonSerializer;
-using AzCore.Shared.ClaimValidation;
+using AzCore.Shared.Claim;
 
 namespace ClaimValidation
 {
@@ -22,7 +22,7 @@ namespace ClaimValidation
 
         private static void ProcessMessage(ClaimForm data, string connectionString, string tableName)
         {
-            var processor = new ClaimValidationProcessor(connectionString, tableName);
+            var processor = new ClaimProcessor(connectionString, tableName);
             var record = processor.ProcessAsync(data);
             if (record != null)
             {

@@ -8,5 +8,6 @@
 
         public const string StorageConnectionString = "STORAGE_CONNECTION_STRING";
         public const string TargetClaimQueueName = "ClaimQueue";
+        public const string TableClaimName = "Claim";
     }
 }
