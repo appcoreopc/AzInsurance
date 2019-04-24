@@ -24,7 +24,7 @@ namespace ClaimTicketUpdate
 
             if (connectionString == null)
             {
-                return new BadRequestObjectResult("");
+                return new BadRequestObjectResult($"Unable to connect to data store {connectionString}");
             }
 
             var userClaimFormData = await MessageConverter.Deserialize<ClaimForm>(req.Body);

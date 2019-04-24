@@ -14,3 +14,6 @@ src/\.vscode/
 src/.vs/
 src/AzCore.Shared/bin/
 src/AzCore.Shared/obj/
+
+src/ClaimTicketUpdate\.Unit\.Test/obj/
+src/ClaimTicketUpdate\.Unit\.Test/bin/
