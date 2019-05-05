@@ -1,4 +1,17 @@
+
+
+
+
 <!--The content below is only a placeholder and can be replaced.-->
+
+
+
+<div id="page-wrap">
+
+
+
+</div>
+
 <div style="text-align:center">
   <h1>
     Welcome to {{ title }}!
@@ -8,6 +21,12 @@
 <h2>Here are some links to help you start: </h2>
 <ul>
   <li>
+
+   <input type="text" #myval id="name" name="name" />
+
+   <input type="button" name="submit" value="execute" (click)="execute($event)" />
+
+   {{myval.value}}
     <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
   </li>
   <li>
@@ -16,5 +35,51 @@
   <li>
     <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
   </li>
+
+  content here! 
+
+  <div> 
+    <div #div> 11111</div>
+    <div #div> 222222</div>
+    <div #div> 333333</div>
+
+    <button (click)="run()" >Execute</button>
+  </div>
+
+
+
+   <ng-template [ngIf]="showIt">
+      <div>
+        template world
+      </div>
+  </ng-template>
+
+
+  <div class="bad curly special"
+  [class]="badCurly">Bad curly</div>
+
+  <button [disabled]="isUnchanged">Cancel is disabled</button>
+
+
+
+ <ng-template #home>
+   Default
+ </ng-template>
+ <ng-template #custom>
+    custom
+  </ng-template>
+
+ <ng-container *ngIf="showIt">
+
+  <p>come see it </p>
+
+ </ng-container>
+ 
+
+
+   <input type="text" required id="name" [(ngModel)]="title"/>
+
+
+   <img [src]="image" width="200" height="200" />
 </ul>
 
