@@ -8,10 +8,7 @@
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "sass"
-        }
+      "schematics": {        
       },
       "architect": {
         "build": {
@@ -27,7 +24,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.sass"
+              
             ],
             "scripts": []
           },
@@ -82,8 +79,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
-            "styles": [
-              "src/styles.sass"
+            "styles": [             
             ],
             "scripts": [],
             "assets": [
