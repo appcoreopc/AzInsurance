@@ -4,3 +4,12 @@
     height : 90vh;
     background: url("assets/background.png") no-repeat right bottom
 }
+
+#container {
+    display : grid;
+    text-align : right;    
+    grid-template-columns: auto auto auto;
+    height : 90vh;
+    background: url("assets/background.png") no-repeat;
+    background-position: bottom right;
+}
