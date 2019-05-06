@@ -1,0 +1,6 @@
+#page-wrap {
+    width: 100vw;
+    margin: 0 auto;
+    height : 90vh;
+    background: url("assets/background.png") no-repeat right bottom
+}

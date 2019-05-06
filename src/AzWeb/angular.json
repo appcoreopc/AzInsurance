@@ -8,7 +8,8 @@
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {        
+      "schematics": {
+        
       },
       "architect": {
         "build": {
@@ -24,7 +25,7 @@
               "src/assets"
             ],
             "styles": [
-              
+              "src/styles.css"
             ],
             "scripts": []
           },
@@ -79,7 +80,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
-            "styles": [             
+            "styles": [
+              "src/styles.css"
             ],
             "scripts": [],
             "assets": [
