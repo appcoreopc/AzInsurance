@@ -6,11 +6,10 @@ import { Component , ViewChild,ViewChildren, QueryList, ElementRef} from '@angul
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
-  title = 'AzWeb';
+  title = 'AzInsurance';
   image = "https://s3.amazonaws.com/site-files-prod/FiftyFlowers/Image/Product/Mini-Black-Eye-bloom-350_c7d02e72.jpg";
 
   showIt = true; 
-
   imageWidth = 1000;
 
   badCurly = "really curly";
