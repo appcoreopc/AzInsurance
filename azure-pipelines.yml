@@ -8,10 +8,6 @@
       Write-Host "Hello World2"
       # Use the environment variables input below to pass secret variables to this script.'
     errorActionPreference: 'continue'
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
 - master
 
