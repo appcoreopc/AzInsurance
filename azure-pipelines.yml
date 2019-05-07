@@ -12,4 +12,8 @@ steps:
   displayName: restoring project
 - script: dotnet build src/AzInsurance.sln --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: '# Write your powershell commands here.
+    Write-Host "Hello World"
