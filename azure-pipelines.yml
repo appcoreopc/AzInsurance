@@ -16,4 +16,5 @@ steps:
   inputs:
     targetType: 'inline'
     script: '# Write your powershell commands here.
-    Write-Host "Hello World"
+    Write-Host "testing"
+
