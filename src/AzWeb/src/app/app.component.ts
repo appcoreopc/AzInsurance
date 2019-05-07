@@ -11,11 +11,7 @@ import { ActionsUnion, Login } from './actions/Login';
 export class AppComponent {
 
   title = 'AzInsurance';
-  image = "https://s3.amazonaws.com/site-files-prod/FiftyFlowers/Image/Product/Mini-Black-Eye-bloom-350_c7d02e72.jpg";
-  showIt = true; 
-  imageWidth = 1000;
-  badCurly = "really curly"
-  
+ 
   @ViewChildren("div") divs: QueryList<any>;
 
   constructor(private store : Store<ActionsUnion>) { 
@@ -26,12 +22,7 @@ export class AppComponent {
     console.log(this.divs);
   }
 
-  public execute(evt) {
-    console.log('button hit!', evt);
-  }
-
-  run() { 
-    console.log("tet")
+  run() {     
     this.store.dispatch(new Login());
   }
 }

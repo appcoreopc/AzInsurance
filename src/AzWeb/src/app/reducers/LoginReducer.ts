@@ -24,9 +24,7 @@ export const initialState: State = {
 // };
 // export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
 
-export function LoginReducer(state = initialState, action: Login): State {
-
-  debug;
+export function LoginReducer(state = initialState, action: Login): State { 
   console.log("store reducer happening...")
   switch (action.type) {
     case ActionTypes.Login:
