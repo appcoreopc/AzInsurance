@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
+import { LoginReducer } from './reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './app.effects';
 import { CarInsuranceComponent } from './static/car-insurance/car-insurance.component';
@@ -21,10 +21,10 @@ import { HealthInsuranceComponent } from './static/health-insurance/health-insur
     ],
   imports: [
     BrowserModule,FormsModule,AppRoutingModule,
-    StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot([AppEffects])
+    StoreModule.forRoot({login : LoginReducer}),
+    //EffectsModule.forRoot([AppEffects])
   ],
   providers: [],
-  bootstrap: [AppComponent,]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
