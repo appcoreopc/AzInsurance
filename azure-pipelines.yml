@@ -8,6 +8,7 @@
       Write-Host "Hello World2"
       # Use the environment variables input below to pass secret variables to this script.'
     errorActionPreference: 'continue'
+
 trigger:
 - master
 
